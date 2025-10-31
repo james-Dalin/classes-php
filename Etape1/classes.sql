@@ -1,0 +1,13 @@
+-- Active: 1754051608856@@127.0.0.1@3306@classes
+DROP DATABASE classes;
+CREATE DATABASE IF NOT EXISTS classes;
+USE classes;
+
+CREATE TABLE IF NOT EXISTS utilisateurs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    login VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    firstname VARCHAR(255) NOT NULL,
+    lastname VARCHAR(255) NOT NULL
+)

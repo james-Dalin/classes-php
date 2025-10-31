@@ -1,49 +1,63 @@
 <?php
 
+declare(strict_types = 1);
 
-// class Etudiant // Une classe c'est comme un plan de maison. C'est sur ce plan que je vais construire toute la maison, donc toutes les fonctions.
-// {
-//     // Les PROPRIETES (terme qui veut tout simplement dire variable en POO)
-//     public $nom;
-//     public $age;
+$host = "localhost";
+$username = "root";
+$password = "";
+$dbname = "classes";
 
-//     // Les METHODES (terme qui veut tout simplement dire fonction en POO) ici, sans le constructeur (__construct)
-//     public function sePresenter() {
-//         return "Je m'appelle " . $this->nom . " et j'ai " . $this->age . "ans.";
-//     }
-// }
+$conn = new mysqli($host, $username, $password, $dbname);
 
-// // Le "$this" fait référence à l'objet actuel (à la variable en somme...)
-// //  la flèche "->" est fait pour accéder aux propriétés/méthodes d'un objet 
-
-// // Les OBJETS (les instances créées)
-// $etudiant1 = new Etudiant();
-// $etudiant1->nom = "Jean";
-// $etudiant1->age = 22;
-
-// $etudiant2 = new Etudiant();
-// $etudiant2->nom = "Alice";
-// $etudiant2->age = 24;
-
-// echo $etudiant1->sePresenter() . "<br>";
-// echo $etudiant2->sePresenter();
-
-class Etudiant {
-
-    public $nom;
-    public $age;
-    public $sexe;
-
-    public function __construct($nom, $age, $sexe) {
-        $this->nom = $nom;
-        $this->age = $age;
-        $this->sexe = $sexe;
+    if($conn->connect_error) {
+        die("Echoue : " . $conn->connect_error) ;
     }
 
-    public function sePresenter() {
-        echo "Salut, je m'appelle {$this->nom} et j'ai {$this->age} ans, et je suis une {$this->sexe}."; 
+$conn->close();
+
+class User 
+{  
+    private $id;
+    public $login;
+    public $email;
+    public $password;
+    public $firstname;
+    public $lastname;
+    private $db;
+
+    public function __construct($id = null) {
+        $conn = new mysqli($host, $username, $password, $dbname);
+
+    }
+
+    //CREATE
+    public function register($login, $email, $password, $firstname, $lastname) {
+        $sql = "INSERT INTO utilisateurs (login, password, email, firstname, lastname)
+                VALUES (:exemple, :exemple1, :exemple2, :James, :Dalin)";
+
+        $stmt = $this->db->prepare($sql);
+        $resultats = $stmt->execute([
+            "login" => $login,
+            "password" => $password,
+            "email" => $email,
+            "firstname" => $firstname,
+            "lastname" => $lastname
+        ]);
+
+        if ($resultats) {
+            $this->id = $this->db->lastInserId();
+            $this->login = $login;
+            $this->email = $email;
+            $this->password = $password;
+            $this->firstname = $firstname;
+            $this->lastname = $lastname;
+        }
+
+        return $resultats;
+    }
+
+    //READ
+    public function getUserById($id) {
+        $sql = "SELECT * FROM utilisateur WHERE = :id";
     }
 }
-
-$etudiant1 = new Etudiant("Alice", 26, "femme");
-echo $etudiant1->sePresenter();
