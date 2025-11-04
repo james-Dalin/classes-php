@@ -25,9 +25,8 @@ class User
     public $lastname;
     private $db;
 
-    public function __construct($id = null) {
-        $conn = new mysqli($host, $username, $password, $dbname);
-
+    public function __construct() {
+        $this->db = new mysqli("localhost", "root", "", "classes");
     }
 
     //CREATE
